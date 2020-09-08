@@ -1,0 +1,34 @@
+
+<h2>Editer une option: <?= $question['title'] ?></h2>
+<form action="<?=Router::getInstance()->generateUrl("batitom_formquestion_update")?>" method="POST" enctype="multipart/form-data" autocomplete="off" data-validate>
+    <h3>Editer le titre ?</h3>
+    <input type="text" name="title" value="<?= htmlspecialchars($question['title']) ?>" data-minlength="2" />
+    <h3>Editer la categorie</h3>
+    <select name="category" id="category" data-requiredselect="-1">
+        <option value="-1">question</option>
+        <option value="sol-nouveau"  <?php if($question['category'] == 'sol-nouveau'): ?> selected <?php endif?>>sol-nouveau</option>
+        <option value="mural-actuel" <?php if($question['category'] == 'mural-actuel'): ?> selected <?php endif?>>mural-actuel</option>
+        <option value="mur-etat" <?php if($question['category'] =='mur-etat'): ?> selected <?php endif?> >mur-etat</option>
+        <option value="plafond-etat" <?php if($question['category'] == 'plafond-etat'): ?> selected <?php endif?> >plafond-etat</option>
+        <option value="salle de baine equipement" <?php if($question['category'] == 'salle de baine equipement'): ?> selected <?php endif?>>salle de baine equipement</option>
+        <option value="ventilation" <?php if($question['category'] == 'ventilation'): ?> selected <?php endif?>>ventilation</option>
+        <option value="suppression" <?php if($question['category'] == 'suppression'): ?> selected <?php endif?>>suppression</option>
+        <option value="installation-electrique" <?php if($question['category'] == 'installation-electrique'): ?> selected <?php endif?>>installation-electrique</option>
+        <option value="mur-nouveau"<?php if($question['category'] == 'mur-nouveau'): ?> selected <?php endif?>>mur-nouveau</option>
+        <option value="point-en-eau"<?php if($question['category'] == 'point-en-eau'): ?> selected <?php endif?> >Point en eau</option>
+        <option value="pose-cuisine"<?php if($question['category'] == 'pose-cuisine'): ?> selected <?php endif?>>pose-cuisine</option>
+    </select>
+    <h3>sélectionner l'élément de prix correspondant à l'option</h3> 
+    <div data-minchecked="1">
+        <?php foreach($checkedprices as $checkedprice): ?>
+            <label for="cat-<?= $checkedprice["id"]?>" class='container'>
+                <input id="cat-<?= $checkedprice["id"]?>" type="checkbox" value="<?= $checkedprice["id"]?>" name="checkedprice_ids[]"  <?php if($checkedprice['isChecked']): ?> checked <?php endif?>>
+                <span class="checkmark"></span>
+                <?= htmlspecialchars($checkedprice["title"])?>
+            </label>
+    <?php endforeach;?>
+    </div>
+    <input type="text" name="id" value="<?= $question['id'] ?>" hidden="hidden">
+    <input type="submit" value="Ajouter">
+</form>
+

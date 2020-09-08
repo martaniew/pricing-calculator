@@ -1,0 +1,397 @@
+/* General */
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: #3a3a3a;
+    width: 100%;
+    margin: 0 auto;
+}
+
+
+main {
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 3em;
+    text-align: center;
+}
+
+h2 {
+    text-align: center
+}
+
+h3 {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Header/Admin panel */
+
+.user, .login-signin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    width: 60%;
+    padding: 20px;
+}
+
+.login-signin a {
+    color: #245c73;
+    text-decoration: none;
+}
+
+header a img {
+    max-width: 40%;
+}
+
+header {
+    display: flex;
+    justify-content: space-between; 
+    padding: 20px;
+}
+
+.connection, .admin-panel {
+    display: flex;
+    align-items: center;
+    flex-direction: column; 
+    }
+
+.connection * {
+    padding: 5px;
+    text-decoration: none;
+    color: #3a3a3a;
+}
+
+.connection a:hover {
+    color: #245c73;
+    font-size: 1.2em;
+}
+
+.admin-panel a, .admin-panel p {
+    padding: 10px; 
+}
+
+fieldset a, fieldset a .fas  {
+    color: #ed1c24;
+    font-size: 0.7em;
+    
+ }
+
+/* Formulaire */
+
+form {
+    background-color: #ffffff;
+    margin: 0 auto;
+    width: 70%;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+form p {
+    text-align: center;
+}
+
+.piece-name {
+    font-size: 2em;
+    color: #245c73;
+    font-weight: bold;
+}
+
+.hide
+{
+    display: none;
+}
+
+.title {
+ font-weight: bold;
+}
+
+fieldset
+{
+    border: none;
+}
+
+.space-choosing {
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+
+.space-choosing .checkmark {
+    margin-top: 1.5em;
+}
+
+
+.space-choosing label
+{
+  font-size: 3em;
+  display: flex;
+  flex-direction: column;
+  color: #ed1c24;
+  align-items: center;
+  justify-content:center;
+
+}
+
+label .fas {
+    color:   #245c73;
+    margin-bottom: 15px;
+    font-size: 2em;
+}
+
+
+/* text, password inputs */
+
+form input[type=text], input[type=password] {
+    padding: 20px;
+    margin: 10px;
+    font-size: 1.5em;
+    font-family: 'Montserrat', sans-serif;
+    }
+
+
+/* personalisés checkbox and radio buttons */
+
+.container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+ .checkmark-radio {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 50%;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+}
+
+.container:hover input ~ .checkmark, .container:hover input ~ .checkmark-radio {
+    background-color: #ccc;
+}
+
+.container input:checked ~ .checkmark, .container input:checked ~ .checkmark-radio {
+    background-color: #245c73;
+}
+
+.checkmark:after, .checkmark-radio:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.container input:checked ~ .checkmark:after, .container input:checked ~ .checkmark-radio:after {
+    display: block;
+}
+
+.container .checkmark:after, .container .checkmark-radio:after {
+    top: 9px;
+    left: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
+
+
+/* personalisés select */
+
+select {
+    padding: 5px;
+    margin-bottom: 25px;
+    border: none;
+    border-radius: 4px;
+    background-color: #ed1c24;
+    color: #cccccc;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+
+select:after {
+    position: absolute;
+    content: "";
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-color: #fff transparent transparent transparent;
+}
+
+.select {
+    width: 50%;
+}
+
+/* personalisés range input */
+
+.range {
+    text-align: center;
+    padding: 30px;
+
+}
+
+.range p {
+    font-size: 1.5em;
+}
+
+input[type=range] {
+width: 100%;
+
+}
+
+
+
+/*  buttons */
+
+input[type=submit], button, .button
+{
+
+    background-color: #ed1c24;
+    padding: 10px 30px;
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    float: right;
+    margin: 20px;
+    align-self: flex-end; 
+}
+
+input[type=submit], button
+{
+    max-width: min-content !important;
+}
+
+
+/*error message de validation du formulaire*/
+.form-error {
+    color: #ed1c24;
+    font-weight: bold;
+}
+
+
+/* Message pour l'utilisateur */
+.flash-message {
+    font-size: 1.5em;
+    color: #ed1c24;
+    text-align: center;
+    max-width: 80%;
+    margin: 0 auto; 
+}
+
+aside {
+    margin: 0 auto; 
+}
+
+.flash-message span {
+    font-weight: bold;
+}
+
+
+/*  tableau */
+table {
+    border-collapse: collapse;
+    border-radius: 1em;
+    overflow: hidden;
+    width: 80%;
+    margin: 0 auto;
+}
+
+tr, td, th {
+    padding: 1em;
+    border-bottom: 2px solid white;
+   
+}
+
+th {
+    background: #245c73;
+    color: white;
+}
+
+tbody tr td:nth-child(2), tbody tr td:nth-child(3), tbody tr td:nth-child(4) {
+    text-align: center;
+}
+
+table tbody tr td:nth-child(1)
+{
+    width: 40%;
+}
+
+table tbody tr td:nth-child(2), table tbody tr td:nth-child(2), table tbody tr td:nth-child(2)
+{
+    width: 20%;
+}
+
+tfoot tr td 
+{
+    text-align: right;
+}
+
+tr:nth-child(even) {
+   background: rgba(36,92,115,0.5);
+}
+
+tr:nth-child(odd) {
+    background:  rgba(36,92,115,0.2);
+ }
+
+
+/*  desktop */
+
+@media screen and (min-device-width: 1200px) 
+{
+    .connection {
+        flex-direction: row;
+        padding: 10px;
+        align-items: baseline;
+    }
+    .admin-panel {
+       flex-direction: row;
+       align-items: baseline;
+    }
+    .space-choosing {
+        flex-direction: row;
+        justify-content: space-between;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+}
+
+
+
+
+

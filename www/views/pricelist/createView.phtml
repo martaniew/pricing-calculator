@@ -1,0 +1,24 @@
+<h2>ajouter l'élement de prix</h2>
+<form action="<?= Router::getInstance()->generateUrl("batitom_pricelist_create")?>" method="POST" enctype="multipart/form-data" autocomplete="off" data-validate>
+    <h3>ajouter le titre ?</h3>
+    <input type="text" name="title" placeholder="Titre" data-required>
+    <h3>ajouter la description</h3>
+    <input type="text"  name="description" placeholder="description" data-required>
+    <h3>ajouter le prix </h3>
+    <input type="text" name="prix" placeholder="prix" data-type="float">
+    <h3>  Est-que le prix unitaire est par m2 </h3>
+    <div>
+    <label for= "oui" class="container" >
+        <input type="radio" name="bym2" value="1" id="oui" />  Oui
+        <span class="checkmark-radio"></span>
+    </label>
+    <label for= "no" class="container"> 
+        <input type="radio" name="bym2" value="0" id="no" /> No
+        <span class="checkmark-radio"></span>
+    </label>
+    </div>
+    <h3>si les meubles sont compris dans le prix, ajouter les prix des meubles</h3>
+    <input type="text" name="dontFurniture" placeholder="furniture" data-type="float" >
+    <input type="submit" value="Ajouter">
+</form>
+

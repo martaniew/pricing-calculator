@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="7c2cd3ec-1b9f-49fa-8192-8b04a16799bb" name="MyRemoteServer" url="http://localhost">
+        <fileTransfer host="ftp.cluster020.hosting.ovh.net" port="21" rootFolder="/www/devis">
+          <advancedOptions>
+            <advancedOptions passiveMode="true" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

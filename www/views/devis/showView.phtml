@@ -1,0 +1,129 @@
+<h1>Pré-estimation de vos travaux</h1>
+<?php if(in_array('sdb', array_column($devisDetails, 'piece'))): ?>
+    <h2>Salle de bain</h2>
+    <table class="show-all">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Prix TTC</th>
+                <th>Quantite</th>
+                <th>Prix</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($devisDetails as $devisDetail): ?>
+                <?php if($devisDetail['piece'] == 'sdb'): ?>
+                    <tr>
+                        <td>
+                            <p class="title"><?= htmlspecialchars($devisDetail['title'])?></p>
+                            <p><?= htmlspecialchars($devisDetail['description'])?></p>
+                        </td>
+                        <td>
+                            <p>
+                                <?= htmlspecialchars($devisDetail['price'])?> &euro;
+                            </p>
+                            <p class="furniture">
+                                <?php if($devisDetail['dontFurniture']): ?>
+                                    dont furniture: <?= htmlspecialchars($devisDetail['dontFurniture'])  ?> &euro;
+                            <?php endif; ?>
+                            </p>
+                        </td>
+                        <td>
+                            <p><?= $devisDetail['quantity']?></p>
+                        </td>
+                        <td>
+                            <p><?=  number_format($devisDetail['priceEach'], 0, '', ' ') ?> &euro;</p>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </tbody>   
+    </table>
+<?php endif; ?>
+
+<?php if(in_array('cuisine', array_column($devisDetails, 'piece'))): ?>
+    <h2>Cuisine</h2>
+    <table class="show-all">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Prix TTC</th>
+                <th>Quantite</th>
+                <th>Prix</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($devisDetails as $devisDetail): ?>
+                <?php if($devisDetail['piece'] == 'cuisine') : ?>
+                    <tr>
+                        <td>
+                            <p class="title"><?= htmlspecialchars($devisDetail['title'])?></p>
+                            <p><?= htmlspecialchars($devisDetail['description'])?></p>
+                        </td>
+                        <td>
+                            <p>
+                            <?= htmlspecialchars($devisDetail['price'])?> &euro;
+                            </p>
+                            <p class="furniture">
+                                <?php if($devisDetail['dontFurniture']): ?>
+                                    dont furniture: <?= htmlspecialchars($devisDetail['dontFurniture'])  ?> &euro;
+                                <?php endif; ?>
+                            </p>
+                        </td>
+                        <td>
+                            <p><?= $devisDetail['quantity']?></p>
+                        </td>
+                        <td>
+                            <p><?=  number_format($devisDetail['priceEach'], 0, '', ' ') ?> &euro;</p>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>        
+        </tbody>
+    </table>
+<?php endif; ?>
+
+<?php if(in_array('pdv', array_column($devisDetails, 'piece'))): ?>
+    <h2>Piéce de vie</h2>
+    <table class="show-all">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Prix TTC</th>
+                <th>Quantité</th>
+                <th>Prix</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($devisDetails as $devisDetail): ?>
+            <?php if($devisDetail['piece'] == 'pdv'): ?>
+                <tr>
+                    <td>
+                        <p class="title"><?= htmlspecialchars($devisDetail['title'])?></p>
+                        <p><?= htmlspecialchars($devisDetail['description'])?></p>
+                    </td>
+                    <td>
+                        <p>
+                            <?= htmlspecialchars($devisDetail['price'])?> &euro;
+                        </p>
+                        <p class="furniture">
+                            <?php if($devisDetail['dontFurniture']): ?>
+                                dont furniture: <?= htmlspecialchars($devisDetail['dontFurniture'])  ?> &euro;
+                            <?php endif; ?>
+                        </p>
+                    </td>
+                    <td>
+                        <p><?= $devisDetail['quantity']?></p>
+                    </td>
+                    <td>
+                        <p><?=  number_format($devisDetail['priceEach'], 0, '', ' ') ?> &euro;</p>
+                    </td>
+                </tr>
+            <?php endif; ?>
+        <?php endforeach; ?>    
+    </tbody>  
+</table>
+    <?php endif; ?>
+<div class="button">
+    <p class="title">  Total : <?= number_format($totalPrice, 0, '', ' ')?> </p>
+</div>

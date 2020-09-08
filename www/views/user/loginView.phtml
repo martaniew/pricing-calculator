@@ -1,0 +1,10 @@
+<h1>Se connecter</h1>
+
+<div class="login-signin">
+    <a href="<?= Router::getInstance()->generateUrl("batitom_user_create")?>">Pas encore inscrit ?</a>
+</div>
+<form action="<?= Router::getInstance()->generateUrl("batitom_user_login")?>" method="POST" class="user" enctype="multipart/form-data" autocomplete="off" data-validate>
+        <input type="text" name="email" placeholder="Email" >
+        <input type="password" name="pwd" placeholder="Password" >
+        <input type="submit" value="Valider" name="Connectez">
+</form>

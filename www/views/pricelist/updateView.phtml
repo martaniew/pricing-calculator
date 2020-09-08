@@ -1,0 +1,22 @@
+<h2>éditer l'élement de prix <?= $price['title'] ?> </h2>
+<form action="<?= Router::getInstance()->generateUrl("batitom_pricelist_update")?>" method="POST" enctype="multipart/form-data" autocomplete="off" class="user" data-validate>
+   <h3>éditer le titre ?</h3>
+    <input type="text" name="title" value="<?= htmlspecialchars($price['title']) ?>" data-required>
+    <h3>éditer la description</h3>
+    <input type="text"  name="description" value="<?= htmlspecialchars($price['description']) ?>">
+    <h3>éditer le prix </h3>
+    <input type="text" name="prix" value="<?= htmlspecialchars($price['price']) ?>" data-type="float">
+    <h3> Est-que le prix unitaire est par m2 </h3>
+    <label for= "oui" class="container">
+    <input type="radio" name="bym2" value="1" id="oui" <?php if($price['bym2'] == '1'): ?> checked  <?php endif; ?> /> Oui
+    <span class="checkmark-radio"></span>
+    </label>
+    <label for= "no" class="container"> 
+    <input type="radio" name="bym2" value="0" id="no" <?php if($price['bym2'] == '0'): ?> checked <?php endif; ?> /> No
+    <span class="checkmark-radio"></span>
+    </label>
+    <h3>si les meubles sont compris dans le prix, ajouter les prix des meubles</h3>
+    <input type="text" name="dontFurniture" value="<?= htmlspecialchars($price['dontFurniture']) ?>" >
+    <input type="text" name="id" value="<?= htmlspecialchars($price['id']) ?>" hidden="hidden">
+    <input type="submit" value="Ajouter">
+</form>

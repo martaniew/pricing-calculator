@@ -1,0 +1,68 @@
+<h1>Liste de prix</h1>
+
+<table class="show-all">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Prix</th>
+            <th>Prix de Fourniture</th>
+            <th>by m2</th>
+            <th>Question correspondant</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($allPrices as $price): ?>
+            <tr>
+                <td>
+                    <p class="title"><?= htmlspecialchars($price['title'])?></p>
+                    <p class="title"><?= htmlspecialchars($price['id'])?></p>
+                    <p><?= htmlspecialchars($price['description'])?></p>
+                </td>
+                <td>
+                    <p><?= htmlspecialchars($price['description'])?></p>
+                </td>
+                <td>
+                    <p><?= htmlspecialchars($price['price'])?> &euro;</p>
+                </td> 
+                <td>   
+                    <p class="furniture">
+                        <?php if($price['dontFurniture']): ?>
+                            dont furniture: <?= htmlspecialchars($price['dontFurniture'])  ?> &euro;
+                          <?php endif; ?>
+                    </p>
+                <td>
+                    <p>
+                        <?php if($price['bym2']): ?>
+                            oui
+                        <?php endif; ?>     
+                    </p>
+                </td>
+                <td>
+                    <?php  if(array_key_exists($price["id"], $allQuestions)): ?>
+                        <?php foreach($allQuestions[$price["id"]] as $question): ?>
+                            <ul> 
+                                <li> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $question['id']?>"> <?= htmlspecialchars($question['title'])?> </a> 
+                                </li> 
+                            </ul>
+                        <?php endforeach; ?>  
+                    <?php endif; ?>   
+                </td>
+                <td>
+                    <a href="<?= Router::getInstance()->generateUrl("batitom_pricelist_update") ?>?id=<?= $price['id'] ?>">
+                        <i class="fas fa-edit"></i> update
+                   </a> 
+                    <a class="ajax-remove-button" href="<?= Router::getInstance()->generateUrl("batitom_pricelist_delate") ?>?id=<?= $price['id'] ?>">
+                        <i class="fas fa-trash-alt"></i> remove
+                    </a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>    
+</table>
+
+
+
+

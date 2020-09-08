@@ -1,0 +1,35 @@
+
+<h2>Ajouter la nouvelle option à sélectionner dans le formulaire</h2>
+<form action="<?= Router::getInstance()->generateUrl("batitom_formquestion_create")?>" method="POST" enctype="multipart/form-data" autocomplete="off" data-validate>
+    <h3>ajouter le titre ?</h3>
+    <input type="text" id="title" name="title" placeholder="title" data-minlength="2">
+    <h3>sélectionner la categorie</h3>
+    <div class="select">
+    <select name="category" id="category" data-requiredselect="-1">
+        <option value="-1">question</option>
+        <option value="sol-nouveau">sol-nouveau</option>
+        <option value="mural-actuel">mural-actuel</option>
+        <option value="mur-etat">mur-etat</option>
+        <option value="plafond-etat">plafond-etat</option>
+        <option value="salle de baine equipement">salle de bains equipement</option>
+        <option value="ventilation">ventilation</option>
+        <option value="suppression">suppression</option>
+        <option value="installation-electrique">installation-electrique</option>
+        <option value="mur-nouveau">mur-nouveau</option>
+        <option value="cloison">cloison</option>
+        <option value="point-en-eau">Point en eau</option>
+        <option value="pose-cuisine">pose-cuisine</option>
+    </select>
+    </div>
+    <h3>sélectionner l'élément de prix correspondant à l'option</h3> 
+    <div data-minchecked="1"> 
+        <?php foreach ($allPrices as $price): ?> 
+            <label for="<?= $price["id"]  ?>" class="container" > <?= $price['title'] ?>
+                <input type="checkbox" name="price-ids[]" id="<?= $price['id'] ?>" value="<?= $price["id"] ?>" >
+                <span class="checkmark"></span>
+            </label>    
+        <?php endforeach; ?>
+    </div>    
+    <input type="submit" value="Ajouter">
+</form>
+

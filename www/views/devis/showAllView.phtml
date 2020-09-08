@@ -1,0 +1,27 @@
+
+<?php if(!$AlldeviIds): ?>
+    <p>Vous n'avez pas encore créé de devis </p>
+    <a href="<?=Router::getInstance()->generateUrl("batitom_devis_calculate") ?>"> <p> Créer un devis maintenant !</p> </a>
+<?php else: ?>
+    <table>
+        <thead>
+            <tr>
+                <th>date de création</th>
+                <th>lien vers le devis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($AlldeviIds as $deviId): ?>
+                <tr class="removable-container">
+                    <td><?= htmlspecialchars($deviId['devisDate'])?></td>
+                    <td> 
+                        <a href="<?= Router::getInstance()->generateUrl("batitom_devis_show") ?>?id=<?= $deviId['id'] ?>">
+                            <i class="fas fa-edit"></i> consulter mon devis
+                        </a>
+                    </td>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
+
+

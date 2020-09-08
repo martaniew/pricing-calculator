@@ -1,0 +1,17 @@
+<h1>Créer votre compte </h1>
+
+<div class="login-signin">
+    <a href="<?= Router::getInstance()->generateUrl("batitom_user_login")?>">Déjà inscrit ?</a>
+</div>
+
+<form action="<?= Router::getInstance()->generateUrl("batitom_user_create")?>" method="POST" class="user" enctype="multipart/form-data" autocomplete="off" data-validate>
+        <input type="text" name="forname" placeholder="Prénom" data-required>
+        <input type="text" name="name" placeholder="Nom" data-required>
+        <input type="text" name="email" placeholder="email" data-email>
+        <input type="text" name="numTel" placeholder="Numero de telephone" data-required>
+        <input type="password" name="pwd" placeholder="Password" data-minlength="8" data-equalcopy="password" >
+        <input type="password" name="pwd-confirm" placeholder="Confirm password" data-equal="password" >
+        <input type="submit" value="Valider">
+</form>
+
+<?php $neededJavaScripts = ["FormValidator.class.js"]  ?>

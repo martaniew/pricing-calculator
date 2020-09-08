@@ -1,0 +1,754 @@
+<!-- Form  -->
+
+<!--les options disponibles dans le radio buttons et checkbox viennent de base de données et sont liées aux elements de la liste de prix-->
+
+<form action="<?= Router::getInstance()->generateUrl("batitom_devis_calculate")?>" method="POST" enctype="multipart/form-data" autocomplete="off" data-validate  >
+    <!-- space-choosing -->
+    <p>Mon estimation de travaux</p>
+    <h1>Je veux rénover: </h1>
+    <div class="space-choosing" data-minchecked>
+        <label class="container"> <i class="fas fa-bath"></i> salle de bains
+            <input  type="checkbox" name="space"  value="salle-de-baine"   />
+            <span class="checkmark"></span>
+        </label>
+        <label class="container"> <i class="fas fa-pizza-slice"></i> cuisine
+            <input  type="checkbox" name="space"  value="cuisine" />
+            <span class="checkmark"></span>
+        </label>
+        <label class="container"> <i class="fas fa-bed"></i>  pièces de vie
+            <input type="checkbox" name="space" value="pieces-de-vie"  />
+            <span class="checkmark"></span>
+        </label>
+    </div>
+   <!-- salle de baine -->
+    <div  id="sdb-form" class="hide" >
+        <p class="piece-name">Salle de bains</p>
+        <div class="what-renovate">
+            <div class="show-hide-radio">
+                <h3> Souhaitez-vous supprimer des éléments de votre salle de bains ? (Douche, baignoire, WC, meubles, lavabo, radiateur...) </h3>
+                <label class="container">  oui
+                    <input type="radio" name="show-hide-radio-supp"  value="1"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+                <label class="container">  no
+                    <input type="radio" name="show-hide-radio-supp"  value="0"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+            </div>
+            <fieldset disabled class="hide">
+                <h3> Quels éléments souhaitez-vous supprimer ?</h3>
+                <?php foreach ($formQuestions as $formQuestion): ?>
+                    <?php if ($formQuestion['category'] == 'suppression'): ?>
+                        <label class="container"> <?= htmlspecialchars($formQuestion['title']) ?> 
+                            <input type="checkbox" name="question-sdb-et-mur-ids[]" id="<?= $formQuestion['id'] ?>" value="<?= $formQuestion["id"] ?>" />
+                            <span class="checkmark"></span>
+                            <input name="<?=  $formQuestion['id'] ?>-quantity" value="1" type = "hidden"/>
+                            <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                            <?php endif; ?>
+                        </label>
+                   <?php endif; ?>
+                <?php endforeach; ?>
+            </fieldset>
+        </div>
+        <div class="what-renovate">
+            <h3>Souhaitez-vous rénover le revêtement de sol ?</h3>
+            <div class="show-hide-radio">
+            <label class="container">  oui
+                <input type="radio" name="show-hide-radio-sol"  value="1"/>
+                <span class="checkmark-radio"></span>
+            </label>
+            <label class="container">  no
+                <input type="radio" name="show-hide-radio-sol"  value="0"/>
+                <span class="checkmark-radio"></span>
+            </label>
+            </div>
+            <fieldset disabled class="sol hide" data-counter>
+                <h3> Quel est le revêtement actuel ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion["category"] == 'modifier-sol'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion["title"]) ?>
+                                <input type="radio" name="question-sdb-rev-mur-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?>
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <h3>Quel nouveau revêtement souhaitez-vous ?</h3>
+                <div  class="show-hide-radio">
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'sol-nouveau'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-sdb-no-mur-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?>
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="range">
+                    <input type="range"  name="floor-surface"
+                           min="0" max="50" value="20" step="1"/>
+                    <h3> La surface approximative du sol en &#13217;  </h3>
+                    <p class="counter">20</p>
+                </div>
+            </fieldset>
+        </div>
+        <div class="what-renovate">
+                <div  class="show-hide-radio">
+                    <h3>Souhaitez-vous rénover les revêtements muraux ? </h3>
+                    <label class="container">  oui
+                        <input type="radio" name="show-hide-radio-mur"  value="1"/>
+                        <span class="checkmark-radio"></span>
+                    </label>
+                    <label class="container">  no
+                        <input type="radio" name="show-hide-radio-mur"  value="0"/>
+                        <span class="checkmark-radio"></span>
+                    </label>
+                </div>
+            <fieldset disabled class="mur hide" data-counter>
+                 <h3>Quel est le revêtement mural actuel ?</h3>
+                 <div>
+                        <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'mural-actuel'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-sdb-act-mur-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?>
+                            </label>
+                       <?php endif; ?>
+                       <?php endforeach; ?>
+                  </div>
+                <h3>Quel est l'état global des murs ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'mur-etat'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-sdb-et-mur-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?>
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <h3>Quel nouveau revêtement souhaitez-vous ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'mur-nouveau'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-sdb-nov-mur-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?>
+                            </label>
+                       <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="range">
+                    <input type="range"  name="wall-surface" min="0" max="50" value="20" step="1"/>
+                    <h3>La surface approximative des murs en &#13217;  </h3>
+                    <p class="counter">20</p>
+                </div>
+            </fieldset>
+        </div>
+        <div class="what-renovate">
+            <div class="show-hide-radio">
+                <h3>Souhaitez-vous repeindre les plafonds ? </h3>
+                <label class="container">  oui
+                    <input type="radio" name="show-hide-radio-plaf"  value="1"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+                <label class="container">  no
+                    <input type="radio" name="show-hide-radio-plaf"  value="0"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+            </div>
+            <fieldset disabled class="hide" data-counter>
+                <h3>Quel est l'état global des plafonds ? ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'plafond-etat'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-sdb-et-plaf-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                            <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                                <i class="fas fa-edit"></i> update
+                                            </a> 
+                                            <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                                <i class="fas fa-trash-alt"></i> remove
+                                            </a>
+                                <?php endif; ?> 
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="range">
+                    <input type="range"  name="plafond-surface" min="0" max="50" value="20" step="1"/>
+                    <h3>La surface approximative des plafonds en &#13217;  </h3>
+                    <p class="counter">10</p>
+                </div>
+            </fieldset>
+        </div>
+        <div class="what-renovate">
+            <div class="show-hide-radio" >
+                <h3> Souhaitez-vous ajouter des nouveaux équipements dans la salle de bains ? (Douche, baignoire, WC, lavabo... ) </h3>
+                <label class="container">  oui
+                    <input type="radio" name="show-hide-radio-equip"  value="1"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+                <label class="container">  no
+                    <input type="radio" name="show-hide-radio-equip"  value="0"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+            </div>
+            <fieldset disabled class="hide">
+                <h3> Quels équipements souhaitez-vous ajouter ?h</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'salle de baine equipement'): ?>
+                            <label class="container"> <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="checkbox" name="question-sdb-equip-ids[]" value="<?= $formQuestion["id"] ?>" >
+                                <span class="checkmark"></span>
+                                <input name="<?=  $formQuestion['id'] ?>-quantity" value="1" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?>
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </fieldset>
+        </div>
+        <div>
+            <fieldset>                    
+                <h3> Faut-il revoir la ventilation - extracteur d'air ?  </h3>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'ventilation'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-sdb-vent-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input name="<?=  $formQuestion['id'] ?>-quantity" value="1" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?>
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+            </fieldset>       
+        </div>
+        <div class="what-renovate">
+            <div class="show-hide-radio" >
+            <h3> Souhaitez-vous modifier l'installation électrique (Prises, luminaires, les sorties spécialisées) ?</h3>
+                <label class="container">  oui
+                    <input type="radio" name="show-hide-radio-elect"  value="1"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+                <label class="container">  no
+                    <input type="radio" name="show-hide-radio-elect"  value="0"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+            </div>
+            <fieldset disabled class="hide">
+                <h3>Quels sont les éléments à modifier </h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'installation-electrique'): ?>
+                            <label for="<?= $formQuestion["id"]  ?>" class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input id = "<?= $formQuestion["id"]  ?>" type="checkbox" name="question-sdb-elec-ids[]"  value="<?= $formQuestion["id"] ?>" class="checkbox<?= $formQuestion['id'] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?>
+                            </label>    
+                            <select id="select<?= $formQuestion['id'] ?>" name="<?= $formQuestion['id'] ?>-quantity" class="hide" >
+                                <?php for($i=1; $i<=10; $i++): ?>
+                                    <option value="<?= $i ?>"><?= $i ?></option>
+                                <?php endfor; ?>
+                            </select>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+   <!-- cuisine -->
+    <div  id="cuisine-form" class="hide">
+        <p class="piece-name">Cuisine</p>
+        <div class="what-renovate">
+            <h3> Souhaitez vous installer des meubles de cuisine fournis par vos soins ?</h3>
+            <div class="show-hide-radio">
+                <label class="container">  oui
+                    <input type="radio" name="show-hide-cuis-radio-el"  value="1"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+                <label class="container">  no
+                    <input type="radio" name="show-hide-cuis-radio-el"  value="0"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+            </div>
+            <fieldset disabled class="element-cuisine hide" data-counter>
+                <h3> Quelle est la valeur total de votre cuisine ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'pose-cuisine'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-cuis-elem-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input name="<?=  $formQuestion['id'] ?>-quantity-cuis" value="1" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?>
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </fieldset>
+        </div>
+        <div class="what-renovate">
+            <h3>Souhaitez-vous rénover le revêtement de sol ?</h3>
+            <div class="show-hide-radio">
+                <label class="container">  oui
+                    <input type="radio" name="show-hide-cuis-radio-sol"  value="1"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+                <label class="container">  no
+                    <input type="radio" name="show-hide-cuis-radio-sol"  value="0"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+            </div>
+            <fieldset disabled class="sol hide" data-counter>
+                <h3> Quel est le revêtement actuel ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'modifier-sol'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-cuis-rev-sol-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input  class="range-input" name="<?=  $formQuestion['id'] ?>-quantity-cuis" value="20" type = "hidden"/>
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?> 
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <h3>Quel nouveau revêtement souhaitez-vous ?</h3>
+                <div  class="show-hide-radio">
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'sol-nouveau'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-cuis-no-sol-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity-cuis" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                    <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                    <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?> 
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>   
+                </div>    
+                <div class="range">
+                    <input type="range"  name="floor-surface-cuis"
+                            min="0" max="50" value="20" step="1"/>
+                    <h3> La surface approximative du sol en &#13217;  </h3>
+                    <p class="counter">20</p>
+                </div>
+            </fieldset>
+        </div>    
+        <div class="what-renovate">
+            <div class="show-hide-radio">
+                <h3>Souhaitez-vous modifier-rénover les revêtements muraux ? </h3>
+                <label class="container">  oui
+                    <input type="radio" name="show-hide-radio-mur-cuis"  value="1"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+                <label class="container">  no
+                    <input type="radio" name="show-hide-radio-mur-cuis"  value="0"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+            </div>
+            <fieldset disabled class="mur hide" data-counter>
+                <h3>Quel est le revêtement mural actuel ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'mural-actuel'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-act-mur-cuis-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity-cuis" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                        <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                            <i class="fas fa-edit"></i> update
+                                        </a> 
+                                        <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                            <i class="fas fa-trash-alt"></i> remove
+                                        </a>
+                                <?php endif; ?> 
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <h3>Quel est l'état global des murs ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'mur-etat'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-et-mur-cuis-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity-cuis" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                        <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                            <i class="fas fa-edit"></i> update
+                                        </a> 
+                                        <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                            <i class="fas fa-trash-alt"></i> remove
+                                        </a>
+                                <?php endif; ?> 
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <h3>Quel nouveau revêtement souhaitez-vous ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'mur-nouveau'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-nov-mur-cuis-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity-cuis" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?> 
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="range">
+                    <input type="range"  name="wall-surface"
+                            min="0" max="50" value="20" step="1"/>
+                    <h3>La surface approximative des murs en &#13217;  </h3>
+                    <p class="counter">20</p>
+                </div>
+            </fieldset>
+        </div>    
+        <div class="what-renovate">
+            <div class="show-hide-radio" >
+                <h3>Souhaitez-Vous repraindre les plafonds ? </h3>
+                <label class="container">  oui
+                    <input type="radio" name="show-hide-radio-plaf"  value="1"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+                <label class="container">  no
+                    <input type="radio" name="show-hide-radio-plaf"  value="0"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+            </div>
+            <fieldset disabled class="hide" data-counter>
+                <h3>Quel est l'état global des plafonds ? ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'plafond-etat'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-et-plaf-cuis-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity-cuis" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                        <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                            <i class="fas fa-edit"></i> update
+                                        </a> 
+                                        <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                            <i class="fas fa-trash-alt"></i> remove
+                                        </a>
+                                <?php endif; ?> 
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="range">
+                    <input type="range"  name="plafond-surface"
+                            min="0" max="50" value="20" step="1"/>
+                    <h3>La surface approximative des plafonds en en &#13217;  </h3>
+                    <p class="counter">10</p>
+                </div>
+            </fieldset>
+        </div>
+    </div>    
+     <!-- pdv -->
+     <div id="pdv-form" class="hide">
+        <p class="piece-name">Pièces de vie</p>
+        <div class="what-renovate">
+            <h3>Souhaitez-vous rénover le revêtement de sol ?</h3>
+            <div class="show-hide-radio">
+                <label class="container">  oui
+                    <input  type="radio" name="show-hide-pdv-radio-sol"  value="1"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+                <label class="container">  no
+                    <input type="radio" name="show-hide-pdv-radio-sol"  value="0"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+            </div>
+            <fieldset disabled class="sol hide" data-counter>
+                <h3> Quel est le revêtement actuel ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'modifier-sol'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-pdv-rev-sol-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity-pdv" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?> 
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <h3>Quel nouveau revêtement souhaitez-vous ?</h3>
+                <div  class="show-hide-radio">
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'sol-nouveau'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-pdv-no-sol-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity-pdv" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?> 
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="range">
+                    <input type="range"  name="floor-surface-cuis"
+                        min="0" max="50" value="20" step="1"/>
+                    <h3> La surface approximative du sol en &#13217;  </h3>
+                    <p class="counter">20</p>
+                </div>
+            </fieldset>
+        </div>
+        <div class="what-renovate">
+            <div  class="show-hide-radio">
+                <h3>Souhaitez-vous rénover les revêtements muraux ?  </h3>
+                <label class="container">  oui
+                    <input type="radio" name="show-hide-radio-mur-pdv"  value="1"/>
+                    <span class="checkmark-radio"></span>
+                    </label>
+                <label class="container">  no
+                    <input type="radio" name="show-hide-radio-mur-pdv"  value="0"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+            </div>
+            <fieldset disabled class="mur hide" data-counter>
+                <h3>Quel est le revêtement mural actuel ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'mural-actuel'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-act-mur-pdv-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity-pdv" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?> 
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <h3>Quel est l'état global des murs ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'mur-etat'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-et-mur-pdv-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity-pdv" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?> 
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>    
+                <h3>Quel nouveau revêtement souhaitez-vous ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'mur-nouveau'): ?>
+                            <label class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-nov-mur-pdv-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity-pdv" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?> 
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="range">
+                    <input type="range"  name="wall-surface"
+                            min="0" max="50" value="20" step="1"/>
+                    <h3>La surface approximative des murs en &#13217;  </h3>
+                    <p class="counter">20</p>
+                </div>
+            </fieldset>
+        </div>
+        <div class="what-renovate">
+            <div class="show-hide-radio" >
+                <h3>Souhaitez-vous repeindre les plafonds ? </h3>
+                <label class="container">  oui
+                    <input type="radio" name="show-hide-pdv-radio-plaf"  value="1"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+                <label class="container">  no
+                    <input type="radio" name="show-hide-pdv-radio-plaf"  value="0"/>
+                    <span class="checkmark-radio"></span>
+                </label>
+            </div>
+            <fieldset disabled class="hide" data-counter>
+                <h3>Quel est l'état global des plafonds ? ?</h3>
+                <div>
+                    <?php foreach ($formQuestions as $formQuestion): ?>
+                        <?php if ($formQuestion['category'] == 'plafond-etat'): ?>
+                            <label  class="container">  <?= htmlspecialchars($formQuestion['title']) ?>
+                                <input type="radio" name="question-et-plaf-pdf-ids[]"  value="<?= $formQuestion["id"] ?>"/>
+                                <span class="checkmark-radio"></span>
+                                <input class="range-input" name="<?=  $formQuestion['id'] ?>-quantity-pdv" value="20" type = "hidden">
+                                <?php if(UserSession::getInstance()->isAdmin()): ?>      
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_update") ?>?id=<?= $formQuestion['id'] ?>">
+                                        <i class="fas fa-edit"></i> update
+                                    </a> 
+                                    <a href="<?= Router::getInstance()->generateUrl("batitom_formquestion_delate") ?>?id=<?= $formQuestion['id'] ?>">"
+                                        <i class="fas fa-trash-alt"></i> remove
+                                    </a>
+                                <?php endif; ?> 
+                            </label>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div class="range">
+                    <input type="range"
+                            min="0" max="50" value="20" step="1"/>
+                    <h3>La surface approximative des plafonds en &#13217;  </h3>
+                    <p class="counter">10</p>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+    <input type="submit" value="Calculer" class='hide'>                                            
+</form>   
+
+<?php $neededScripts[] = "devis.js" ?>                           
+                                        
+                                        
+
+
+   
